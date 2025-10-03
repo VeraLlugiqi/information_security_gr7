@@ -1,0 +1,4 @@
+Main.class
+QRCodeGenerator.class
+EdDSAUtil.class
+SignedQRCode.class
