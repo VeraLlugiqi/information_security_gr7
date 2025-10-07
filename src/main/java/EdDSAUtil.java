@@ -1,6 +1,9 @@
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
+import java.security.KeyFactory;
 import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 public class EdDSAUtil {
     
@@ -24,7 +27,7 @@ public class EdDSAUtil {
             throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, NoSuchProviderException {
         Signature signature = Signature.getInstance("Ed25519", "BC");
         signature.initSign(privateKey);
-        signature.update(data.getBytes());
+        signature.update(data.getBytes(StandardCharsets.UTF_8));
         return signature.sign();
     }
 
@@ -35,7 +38,7 @@ public class EdDSAUtil {
             throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, NoSuchProviderException {
         Signature signature = Signature.getInstance("Ed25519", "BC");
         signature.initVerify(publicKey);
-        signature.update(data.getBytes());
+        signature.update(data.getBytes(StandardCharsets.UTF_8));
         return signature.verify(signatureBytes);
     }
 
@@ -51,5 +54,15 @@ public class EdDSAUtil {
      */
     public static String signatureToBase64(byte[] signature) {
         return Base64.getEncoder().encodeToString(signature);
+    }
+
+    /**
+     * Reconstructs a PublicKey instance from a Base64-encoded X.509 key
+     */
+    public static PublicKey publicKeyFromBase64(String base64) throws Exception {
+        byte[] decoded = Base64.getDecoder().decode(base64);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+        KeyFactory kf = KeyFactory.getInstance("Ed25519", "BC");
+        return kf.generatePublic(spec);
     }
 }

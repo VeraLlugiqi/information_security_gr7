@@ -97,6 +97,16 @@ All dependencies are managed via Maven (see `pom.xml`):
 - ZXing JavaSE 3.5.2
 - Bouncy Castle Provider 1.70
 - Bouncy Castle PKIX 1.70
+- - Gson 2.10.1 — used for robust JSON serialization/deserialization of the signed payload
+
+
+### Update 0.2
+- Replaced manual JSON string building with Gson for correct escaping and reliable parsing.
+- Added `publicKeyFromBase64()` helper to reconstruct Ed25519 public keys from Base64 strings.
+- Improved verification logic: `SignedQRCode.verify()` now directly uses Gson-parsed data and EdDSAUtil utilities.
+
+
+
 
 ## License
 
