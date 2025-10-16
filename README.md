@@ -111,4 +111,4 @@ All dependencies are managed via Maven (see `pom.xml`):
 ## License
 
 This project is for educational purposes as part of Information Security coursework.
-Proejkti ne lenden siguria e infromacionit.
+Proejkti ne lenden Siguria e Infromacionit.
