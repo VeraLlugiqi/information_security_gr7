@@ -18,11 +18,13 @@ A Java application that generates QR codes containing digitally signed data usin
 ## Project Structure
 
 ```
-src/
-├── Main.java           # Demo application
-├── EdDSAUtil.java      # EdDSA cryptographic utilities
+src/main/java/com/infosec/qreddsa/
+├── Main.java            # Demo application
+├── EdDSAUtil.java       # EdDSA cryptographic utilities
 ├── QRCodeGenerator.java # QR code generation
-└── SignedQRCode.java   # Signed QR code data model
+├── QRCodeScanner.java   # QR code scanning and reading
+├── QRCodeViewer.java    # GUI viewer for QR codes
+└── SignedQRCode.java    # Signed QR code data model
 ```
 
 ## Installation
@@ -43,14 +45,14 @@ mvn clean install
 ### Run the demo
 
 ```bash
-mvn compile exec:java -Dexec.mainClass="Main"
+mvn compile exec:java -Dexec.mainClass="com.infosec.qreddsa.Main"
 ```
 
-Or compile and run directly:
+Or build and run with Maven:
 
 ```bash
-javac -cp "target/dependency/*:." src/*.java
-java -cp "target/dependency/*:src" Main
+mvn clean package
+java -cp "target/classes:target/dependency/*" com.infosec.qreddsa.Main
 ```
 
 ### How it works
@@ -97,18 +99,20 @@ All dependencies are managed via Maven (see `pom.xml`):
 - ZXing JavaSE 3.5.2
 - Bouncy Castle Provider 1.70
 - Bouncy Castle PKIX 1.70
-- - Gson 2.10.1 — used for robust JSON serialization/deserialization of the signed payload
+- Gson 2.10.1 — used for robust JSON serialization/deserialization of the signed payload
 
 
 ### Update 0.2
-- Replaced manual JSON string building with Gson for correct escaping and reliable parsing.
-- Added `publicKeyFromBase64()` helper to reconstruct Ed25519 public keys from Base64 strings.
-- Improved verification logic: `SignedQRCode.verify()` now directly uses Gson-parsed data and EdDSAUtil utilities.
-
-
-
+- Replaced manual JSON string building with Gson for correct escaping and reliable parsing
+- Added `publicKeyFromBase64()` helper to reconstruct Ed25519 public keys from Base64 strings
+- Improved verification logic: `SignedQRCode.verify()` now directly uses Gson-parsed data and EdDSAUtil utilities
+- Added proper package structure (`com.infosec.qreddsa`)
+- Enhanced input validation across all components
+- Added QR code scanning and verification functionality
+- Improved code documentation with comprehensive JavaDoc
 
 ## License
 
 This project is for educational purposes as part of Information Security coursework.
-Proejkti ne lenden Siguria e Infromacionit.
+
+**Project for Information Security course (Projekti për lëndën Siguria e Informacionit)**

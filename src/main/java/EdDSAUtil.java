@@ -1,3 +1,5 @@
+package com.infosec.qreddsa;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.*;
 import java.security.spec.X509EncodedKeySpec;
@@ -5,6 +7,10 @@ import java.security.KeyFactory;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Utility class for EdDSA (Ed25519) cryptographic operations including
+ * key generation, signing, and verification
+ */
 public class EdDSAUtil {
     
     static {
@@ -102,8 +108,8 @@ public class EdDSAUtil {
                 throw new IllegalArgumentException("Decoded public key is empty");
             }
             X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
-            KeyFactory kf = KeyFactory.getInstance("Ed25519", "BC");
-            return kf.generatePublic(spec);
+            KeyFactory keyFactory = KeyFactory.getInstance("Ed25519", "BC");
+            return keyFactory.generatePublic(spec);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid Base64 encoding for public key: " + e.getMessage(), e);
         }

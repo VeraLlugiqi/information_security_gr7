@@ -1,3 +1,5 @@
+package com.infosec.qreddsa;
+
 import java.security.KeyPair;
 import java.util.Base64;
 

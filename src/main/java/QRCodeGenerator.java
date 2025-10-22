@@ -1,3 +1,5 @@
+package com.infosec.qreddsa;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -16,6 +18,15 @@ import java.util.Map;
  * Utility class for generating QR codes with configurable error correction levels
  */
 public class QRCodeGenerator {
+    
+    /** Default width for QR code images in pixels */
+    public static final int DEFAULT_WIDTH = 400;
+    
+    /** Default height for QR code images in pixels */
+    public static final int DEFAULT_HEIGHT = 400;
+    
+    /** Maximum text length that can be encoded in a QR code (approximate for version 40) */
+    public static final int MAX_TEXT_LENGTH = 2953;
     
     /**
      * Error correction levels for QR codes
@@ -72,8 +83,8 @@ public class QRCodeGenerator {
         if (text == null) {
             throw new IllegalArgumentException("Text to encode cannot be null");
         }
-        if (text.length() > 2953) { // Approximate maximum for version 40 QR code
-            throw new IllegalArgumentException("Text is too long for QR code encoding (max ~2953 characters)");
+        if (text.length() > MAX_TEXT_LENGTH) {
+            throw new IllegalArgumentException("Text is too long for QR code encoding (max ~" + MAX_TEXT_LENGTH + " characters)");
         }
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("QR code dimensions must be positive");
@@ -103,7 +114,7 @@ public class QRCodeGenerator {
      */
     public static void generateQRCode(String text, String filePath) 
             throws WriterException, IOException {
-        generateQRCode(text, 400, 400, filePath, ErrorCorrection.M);
+        generateQRCode(text, DEFAULT_WIDTH, DEFAULT_HEIGHT, filePath, ErrorCorrection.M);
     }
     
     /**
@@ -111,6 +122,6 @@ public class QRCodeGenerator {
      */
     public static void generateQRCode(String text, String filePath, ErrorCorrection errorCorrection) 
             throws WriterException, IOException {
-        generateQRCode(text, 400, 400, filePath, errorCorrection);
+        generateQRCode(text, DEFAULT_WIDTH, DEFAULT_HEIGHT, filePath, errorCorrection);
     }
 }

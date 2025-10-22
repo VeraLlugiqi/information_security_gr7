@@ -1,3 +1,5 @@
+package com.infosec.qreddsa;
+
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Base64;
@@ -58,12 +60,15 @@ public class SignedQRCode {
         return gson.toJson(this);
     }
     /**
-     * Verifies the signature using the embedded public key. Returns true if valid.
+     * Verifies the signature using the embedded public key
+     * 
+     * @return true if the signature is valid, false otherwise
+     * @throws Exception if verification fails due to invalid keys or signature format
      */
     public boolean verify() throws Exception {
         byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
-        PublicKey pub = EdDSAUtil.publicKeyFromBase64(this.publicKey);
-        return EdDSAUtil.verify(this.data, signatureBytes, pub);
+        PublicKey publicKey = EdDSAUtil.publicKeyFromBase64(this.publicKey);
+        return EdDSAUtil.verify(this.data, signatureBytes, publicKey);
     }
 
     /**
