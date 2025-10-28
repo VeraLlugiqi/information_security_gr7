@@ -10,9 +10,9 @@ import com.google.gson.Gson;
  * the EdDSA signature, and the public key for verification
  */
 public class SignedQRCode {
-    private String data;
-    private String signature;
-    private String publicKey;
+    private final String data;
+    private final String signature;
+    private final String publicKey;
 
     public SignedQRCode(String data, String signature, String publicKey) {
         this.data = data;
@@ -129,9 +129,5 @@ public class SignedQRCode {
 
     public String getSignature() {
         return signature;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
     }
 }

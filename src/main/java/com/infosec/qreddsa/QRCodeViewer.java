@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
  * Utility class for displaying QR code images in a GUI window using Swing
  */
 public class QRCodeViewer {
-    
+
     /**
      * Displays the QR code image in a GUI window
      * 
@@ -59,15 +59,9 @@ public class QRCodeViewer {
                 
             } catch (Exception e) {
                 System.err.println("Error displaying QR code: " + e.getMessage());
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         });
-    }
-    
-    /**
-     * Displays the QR code with a default title
-     */
-    public static void displayQRCode(String imagePath) {
-        displayQRCode(imagePath, "Signed QR Code");
     }
 }

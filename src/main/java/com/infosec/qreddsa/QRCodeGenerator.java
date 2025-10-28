@@ -51,21 +51,7 @@ public class QRCodeGenerator {
             return level;
         }
     }
-    
-    /**
-     * Generates a QR code image from the given text and saves it to a file
-     * 
-     * @param text The text to encode in the QR code
-     * @param width The width of the QR code image
-     * @param height The height of the QR code image
-     * @param filePath The path where the QR code image should be saved
-     * @throws IllegalArgumentException if text is null or too long, or dimensions are invalid
-     */
-    public static void generateQRCode(String text, int width, int height, String filePath) 
-            throws WriterException, IOException {
-        generateQRCode(text, width, height, filePath, ErrorCorrection.M);
-    }
-    
+
     /**
      * Generates a QR code image from the given text with specified error correction level
      * 
@@ -109,14 +95,6 @@ public class QRCodeGenerator {
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }
 
-    /**
-     * Generates a QR code with default dimensions (400x400) and medium error correction
-     */
-    public static void generateQRCode(String text, String filePath) 
-            throws WriterException, IOException {
-        generateQRCode(text, DEFAULT_WIDTH, DEFAULT_HEIGHT, filePath, ErrorCorrection.M);
-    }
-    
     /**
      * Generates a QR code with default dimensions (400x400) and specified error correction
      */

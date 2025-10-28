@@ -74,6 +74,7 @@ public class Main {
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
