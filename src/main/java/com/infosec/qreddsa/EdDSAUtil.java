@@ -8,18 +8,17 @@ import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Utility class for EdDSA (Ed25519) cryptographic operations including
- * key generation, signing, and verification
+ * Klasa utility për operacionet kriptografike EdDSA (Ed25519):
+ * gjenerimi i çelësave, nënshkrimi dhe verifikimi
  */
 public class EdDSAUtil {
     
     static {
-        // Add Bouncy Castle as a security provider
         Security.addProvider(new BouncyCastleProvider());
     }
 
     /**
-     * Generates an EdDSA key pair (Ed25519)
+     * Gjeneron një çift çelësash EdDSA (Ed25519)
      */
     public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("Ed25519", "BC");
@@ -27,20 +26,15 @@ public class EdDSAUtil {
     }
 
     /**
-     * Signs data using EdDSA with the provided private key
-     * 
-     * @param data The data to sign (must not be null)
-     * @param privateKey The private key for signing (must not be null)
-     * @return The signature bytes
-     * @throws IllegalArgumentException if data or privateKey is null
+     * Nënshkron të dhëna duke përdorur EdDSA me çelësin privat
      */
     public static byte[] sign(String data, PrivateKey privateKey) 
             throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, NoSuchProviderException {
         if (data == null) {
-            throw new IllegalArgumentException("Data to sign cannot be null");
+            throw new IllegalArgumentException("Të dhënat për nënshkrim nuk mund të jenë null");
         }
         if (privateKey == null) {
-            throw new IllegalArgumentException("Private key cannot be null");
+            throw new IllegalArgumentException("Çelësi privat nuk mund të jetë null");
         }
         
         Signature signature = Signature.getInstance("Ed25519", "BC");
@@ -50,24 +44,18 @@ public class EdDSAUtil {
     }
 
     /**
-     * Verifies a signature using EdDSA with the provided public key
-     * 
-     * @param data The original data that was signed (must not be null)
-     * @param signatureBytes The signature bytes to verify (must not be null)
-     * @param publicKey The public key for verification (must not be null)
-     * @return true if the signature is valid, false otherwise
-     * @throws IllegalArgumentException if any parameter is null
+     * Verifikon një nënshkrim duke përdorur EdDSA me çelësin publik
      */
     public static boolean verify(String data, byte[] signatureBytes, PublicKey publicKey) 
             throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, NoSuchProviderException {
         if (data == null) {
-            throw new IllegalArgumentException("Data to verify cannot be null");
+            throw new IllegalArgumentException("Të dhënat për verifikim nuk mund të jenë null");
         }
         if (signatureBytes == null || signatureBytes.length == 0) {
-            throw new IllegalArgumentException("Signature bytes cannot be null or empty");
+            throw new IllegalArgumentException("Nënshkrimi nuk mund të jetë null ose bosh");
         }
         if (publicKey == null) {
-            throw new IllegalArgumentException("Public key cannot be null");
+            throw new IllegalArgumentException("Çelësi publik nuk mund të jetë null");
         }
         
         Signature signature = Signature.getInstance("Ed25519", "BC");
@@ -76,42 +64,32 @@ public class EdDSAUtil {
         return signature.verify(signatureBytes);
     }
 
-    /**
-     * Converts a public key to Base64 string for easy sharing
-     */
     public static String publicKeyToBase64(PublicKey publicKey) {
         return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 
-    /**
-     * Converts a signature byte array to Base64 string
-     */
     public static String signatureToBase64(byte[] signature) {
         return Base64.getEncoder().encodeToString(signature);
     }
 
     /**
-     * Reconstructs a PublicKey instance from a Base64-encoded X.509 key
-     * 
-     * @param base64 Base64-encoded public key string (must not be null or empty)
-     * @return The reconstructed PublicKey
-     * @throws IllegalArgumentException if base64 is null, empty, or invalid
+     * Rikonstrukton një çelës publik nga një string Base64
      */
     public static PublicKey publicKeyFromBase64(String base64) throws Exception {
         if (base64 == null || base64.trim().isEmpty()) {
-            throw new IllegalArgumentException("Base64 public key string cannot be null or empty");
+            throw new IllegalArgumentException("Stringu i çelësit publik Base64 nuk mund të jetë null ose bosh");
         }
         
         try {
             byte[] decoded = Base64.getDecoder().decode(base64);
             if (decoded.length == 0) {
-                throw new IllegalArgumentException("Decoded public key is empty");
+                throw new IllegalArgumentException("Çelësi publik i dekoduar është bosh");
             }
             X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
             KeyFactory keyFactory = KeyFactory.getInstance("Ed25519", "BC");
             return keyFactory.generatePublic(spec);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid Base64 encoding for public key: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Kodimi Base64 i pavlefshëm për çelësin publik: " + e.getMessage(), e);
         }
     }
 }

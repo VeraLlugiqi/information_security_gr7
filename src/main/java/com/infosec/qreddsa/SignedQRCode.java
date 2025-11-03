@@ -6,8 +6,8 @@ import java.util.Base64;
 import com.google.gson.Gson;
 
 /**
- * Represents a digitally signed QR code that includes the original data,
- * the EdDSA signature, and the public key for verification
+ * Përfaqëson një QR kod me nënshkrim digjital që përfshin të dhënat origjinale,
+ * nënshkrimin EdDSA dhe çelësin publik për verifikim
  */
 public class SignedQRCode {
     private final String data;
@@ -21,27 +21,20 @@ public class SignedQRCode {
     }
 
     /**
-     * Creates a signed QR code by signing the data with the private key
-     * 
-     * @param data The data to sign (must not be null or empty)
-     * @param keyPair The key pair for signing (must not be null)
-     * @return A SignedQRCode object containing the signed data
-     * @throws IllegalArgumentException if data or keyPair is null/invalid
-     * @throws Exception if signing fails
+     * Krijon një QR kod të nënshkruar duke nënshkruar të dhënat me çelësin privat
      */
     public static SignedQRCode create(String data, KeyPair keyPair) throws Exception {
-        // Input validation
         if (data == null || data.trim().isEmpty()) {
-            throw new IllegalArgumentException("Data to sign cannot be null or empty");
+            throw new IllegalArgumentException("Të dhënat për nënshkrim nuk mund të jenë null ose bosh");
         }
-        if (data.length() > 2900) { // Leave room for JSON overhead (~50 chars)
-            throw new IllegalArgumentException("Data is too long for QR code encoding (max ~2900 characters)");
+        if (data.length() > 2900) {
+            throw new IllegalArgumentException("Të dhënat janë shumë të gjata për kodim në QR kod (maksimumi ~2900 karaktere)");
         }
         if (keyPair == null) {
-            throw new IllegalArgumentException("Key pair cannot be null");
+            throw new IllegalArgumentException("Çifti i çelësave nuk mund të jetë null");
         }
         if (keyPair.getPrivate() == null || keyPair.getPublic() == null) {
-            throw new IllegalArgumentException("Key pair must have both private and public keys");
+            throw new IllegalArgumentException("Çifti i çelësave duhet të ketë të dy çelësat (privat dhe publik)");
         }
         
         byte[] signatureBytes = EdDSAUtil.sign(data, keyPair.getPrivate());
@@ -52,18 +45,15 @@ public class SignedQRCode {
     }
 
     /**
-     * Converts the signed QR code to a JSON string that can be encoded in a QR code
+     * Konverton QR kodin e nënshkruar në një string JSON që mund të kodohet në një QR kod
      */
     public String toJSON() {
-        // Use Gson to produce a correct JSON representation
         Gson gson = new Gson();
         return gson.toJson(this);
     }
+    
     /**
-     * Verifies the signature using the embedded public key
-     * 
-     * @return true if the signature is valid, false otherwise
-     * @throws Exception if verification fails due to invalid keys or signature format
+     * Verifikon nënshkrimin duke përdorur çelësin publik të integruar
      */
     public boolean verify() throws Exception {
         byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
@@ -72,57 +62,47 @@ public class SignedQRCode {
     }
 
     /**
-     * Parse a SignedQRCode from a JSON string produced by {@link #toJSON()}.
-     * 
-     * @param json The JSON string to parse
-     * @return A SignedQRCode object
-     * @throws IllegalArgumentException if json is null, empty, or invalid
+     * Parse një SignedQRCode nga një string JSON
      */
     public static SignedQRCode fromJSON(String json) {
         if (json == null || json.trim().isEmpty()) {
-            throw new IllegalArgumentException("JSON string cannot be null or empty");
+            throw new IllegalArgumentException("Stringu JSON nuk mund të jetë null ose bosh");
         }
         
         try {
             Gson gson = new Gson();
             SignedQRCode result = gson.fromJson(json, SignedQRCode.class);
             
-            // Validate parsed object
             if (result == null) {
-                throw new IllegalArgumentException("Failed to parse JSON: result is null");
+                throw new IllegalArgumentException("Dështoi parsing i JSON: rezultati është null");
             }
             if (result.data == null || result.signature == null || result.publicKey == null) {
-                throw new IllegalArgumentException("Invalid SignedQRCode: missing required fields (data, signature, or publicKey)");
+                throw new IllegalArgumentException("SignedQRCode i pavlefshëm: mungojnë fushat e nevojshme (data, signature, ose publicKey)");
             }
             if (result.data.trim().isEmpty()) {
-                throw new IllegalArgumentException("Invalid SignedQRCode: data field is empty");
+                throw new IllegalArgumentException("SignedQRCode i pavlefshëm: fusha data është bosh");
             }
             
             return result;
         } catch (com.google.gson.JsonSyntaxException e) {
-            throw new IllegalArgumentException("Invalid JSON format: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Format JSON i pavlefshëm: " + e.getMessage(), e);
         }
     }
 
     /**
-     * Generates a QR code image containing the signed data with default error correction
+     * Gjeneron një imazh QR kod që përmban të dhënat e nënshkruara me korrigjim gabimesh parazgjedhje
      */
     public void generateQRCode(String filePath) throws Exception {
         generateQRCode(filePath, QRCodeGenerator.ErrorCorrection.M);
     }
     
     /**
-     * Generates a QR code image containing the signed data with specified error correction level
-     * 
-     * @param filePath The path where the QR code should be saved
-     * @param errorCorrection The error correction level (L, M, Q, H)
-     * @throws Exception if QR code generation fails
+     * Gjeneron një imazh QR kod që përmban të dhënat e nënshkruara me nivel të specifikuar korrigjimi gabimesh
      */
     public void generateQRCode(String filePath, QRCodeGenerator.ErrorCorrection errorCorrection) throws Exception {
         QRCodeGenerator.generateQRCode(toJSON(), filePath, errorCorrection);
     }
 
-    // Getters
     public String getData() {
         return data;
     }
