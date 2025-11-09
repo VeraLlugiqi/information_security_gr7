@@ -38,7 +38,7 @@ public class Main {
             System.out.println("5. Verifikimi i nënshkrimit...");
             byte[] signatureBytes = Base64.getDecoder().decode(signedQRCode.getSignature());
             boolean isValid = EdDSAUtil.verify(originalData, signatureBytes, keyPair.getPublic());
-            System.out.println("   Nënshkrimi i vlefshëm: " + (isValid ? "✓ PO" : "✗ JO"));
+            System.out.println("   Nënshkrimi i vlefshëm: " + (isValid ? "PO" : "JO"));
             System.out.println();
 
             System.out.println("6. Përmbajtja e QR kodit (JSON):");
@@ -52,7 +52,7 @@ public class Main {
                 System.out.println("   Të dhënat e skanuara: \"" + scannedQRCode.getData() + "\"");
                 
                 boolean scannedValid = QRCodeScanner.verifyScannedQRCode(qrCodeFile);
-                System.out.println("   Nënshkrimi i skanuar i vlefshëm: " + (scannedValid ? "✓ PO" : "✗ JO"));
+                System.out.println("   Nënshkrimi i skanuar i vlefshëm: " + (scannedValid ? "PO" : "JO"));
             } catch (Exception e) {
                 System.out.println("   Nuk mund të skanohej QR kodi: " + e.getMessage());
             }

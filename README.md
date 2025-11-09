@@ -90,25 +90,9 @@ cd information_security_gr7
 mvn clean install
 ```
 
-Kjo komandë do të:
-- Shkarkojë të gjitha varësitë e nevojshme
-- Kompilojë kodin burimor
-- Krijojë skedarët e klasave në `target/classes`
 
 ## Përdorimi
 
-### Ekzekutimi i Aplikacionit Demo
-
-```bash
-mvn compile exec:java -Dexec.mainClass="com.infosec.qreddsa.Main"
-```
-
-Ose ndërtoni dhe ekzekutoni manualisht:
-
-```bash
-mvn clean package
-java -cp "target/classes:target/dependency/*" com.infosec.qreddsa.Main
-```
 
 ### Si Funksionon
 
@@ -167,81 +151,6 @@ QR kodi përmban një objekt JSON me tre fusha:
 2. **Integriteti**: Çdo ndryshim në të dhëna do të shkaktojë dështim të verifikimit
 3. **Non-repudiation**: Nënshkrimi provon që pronari i çelësit privat ka nënshkruar të dhënat
 
-## Varësitë
-
-Të gjitha varësitë menaxhohen përmes Maven (shih `pom.xml`):
-
-- **ZXing Core 3.5.2**: Bibliotekë bazë për gjenerimin dhe leximin e QR kodeve
-- **ZXing JavaSE 3.5.2**: Komponentë për Java SE për trajtimin e imazheve
-- **Bouncy Castle Provider 1.70**: Provider kriptografik që ofron mbështetje për EdDSA/Ed25519
-- **Bouncy Castle PKIX 1.70**: Komponentë PKIX për trajtimin e çelësave
-- **Gson 2.10.1**: Bibliotekë për serializimin dhe deserializimin e besueshëm të JSON
-
-## Analiza e Kodit
-
-### Përmbushja e Kërkesave
-
-✅ **Gjenerimi i QR Kodit**: Implementuar plotësisht me `QRCodeGenerator.java`
-✅ **Nënshkrime Digjitale me EdDSA**: Implementuar plotësisht me `EdDSAUtil.java` duke përdorur Ed25519
-✅ **Në Java**: I gjithë kodi është shkruar në Java 11+
-
-### Komponentët dhe Nevojshmëria e Tyre
-
-Të gjitha komponentët janë të nevojshëm dhe plotësojnë një qëllim specifik:
-
-1. **EdDSAUtil.java** - **E nevojshme**: Operacionet bazë kriptografike
-2. **SignedQRCode.java** - **E nevojshme**: Modeli i të dhënave dhe logjika e nënshkrimit
-3. **QRCodeGenerator.java** - **E nevojshme**: Gjenerimi i QR kodeve
-4. **QRCodeScanner.java** - **E nevojshme**: Skanimi dhe verifikimi i QR kodeve (për zgjidhje të plotë)
-5. **QRCodeViewer.java** - **Opsionale por e dobishme**: Përmirëson demonstrimin
-6. **Main.java** - **E nevojshme**: Aplikacioni demo që tregon funksionalitetin
-
-### Cilësia e Kodit
-
-- ✅ Validim i plotë i inputeve në të gjitha metodat
-- ✅ Dokumentim i plotë me JavaDoc
-- ✅ Trajtim i gabimeve i përmirësuar
-- ✅ Strukturë e organizuar dhe e lexueshme
-- ✅ Përdorim i bibliotekave standarde dhe të sigurta
-
-## Shembuj Përdorimi
-
-### Shembull 1: Krijimi i një QR Kodi të Nënshkruar
-
-```java
-// Gjenero çift çelësash
-KeyPair keyPair = EdDSAUtil.generateKeyPair();
-
-// Krijoni QR kod të nënshkruar
-String data = "Mesazhi im i sigurt";
-SignedQRCode signedQRCode = SignedQRCode.create(data, keyPair);
-
-// Gjenero imazhin e QR kodit
-signedQRCode.generateQRCode("qr_code.png");
-```
-
-### Shembull 2: Verifikimi i një QR Kodi
-
-```java
-// Skano QR kodin
-SignedQRCode scanned = QRCodeScanner.scanSignedQRCode("qr_code.png");
-
-// Verifiko nënshkrimin
-boolean isValid = scanned.verify();
-if (isValid) {
-    System.out.println("Nënshkrimi është i vlefshëm!");
-    System.out.println("Të dhënat: " + scanned.getData());
-} else {
-    System.out.println("Nënshkrimi nuk është i vlefshëm!");
-}
-```
-
-### Shembull 3: Verifikim i Direkt
-
-```java
-// Verifiko direkt nga skedari
-boolean isValid = QRCodeScanner.verifyScannedQRCode("qr_code.png");
-```
 
 ## Testimi
 
@@ -252,24 +161,5 @@ Për të testuar aplikacionin:
 3. Verifikoni që përmbajtja JSON është e saktë
 4. Testoni verifikimin e nënshkrimit
 
-## Përmirësime të Mundshme
-
-- [ ] Ruajtja e çelësave në skedarë për përdorim të përsëritur
-- [ ] Mbështetje për çelësa të shumtë (key rotation)
-- [ ] Enkriptim i të dhënave para nënshkrimit
-- [ ] Mbështetje për QR kode me madhësi të ndryshme
-- [ ] API REST për gjenerimin dhe verifikimin e QR kodeve
-
-## Licenca
-
-Ky projekt është për qëllime edukative si pjesë e punës së kursit të Sigurisë së Informacionit.
-
 **Projekti për lëndën Siguria e Informacionit - Grupi 7**
-
-## Kontakt dhe Mbështetje
-
-Për pyetje ose probleme, ju lutemi kontaktoni ekipin e projektit.
-
----
-
-**Shënim**: Ky projekt demonstron përdorimin praktik të kriptografisë moderne (EdDSA) në kombinim me teknologjinë e QR kodeve për të siguruar autenticitetin dhe integritetin e të dhënave.
+**11.2025**
