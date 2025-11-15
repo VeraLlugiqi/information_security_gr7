@@ -29,8 +29,6 @@ public class Main {
             System.out.println("4. Gjenerimi i imazhit të QR kodit...");
             signedQRCode.generateQRCode(qrCodeFile);
             System.out.println("   QR kodi u ruajt në: " + qrCodeFile);
-            System.out.println();
-            
             System.out.println("   Hapja e shfaqësit të QR kodit...");
             QRCodeViewer.displayQRCode(qrCodeFile, "QR Kod me Nënshkrim EdDSA");
             System.out.println();
